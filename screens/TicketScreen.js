@@ -3,16 +3,12 @@ import { ScrollView, View, StyleSheet, Text, ImageBackground, Image, Dimensions 
 import { ExpoLinksView } from '@expo/samples';
 
 export default class TicketScreen extends React.Component {
-  /*
-  static navigationOptions = {
-    title: 'Chinks',
-  };
-*/
+
   constructor(props)
   {
     super(props);
   }
-//<Image source={require('../assets/images/banana.png')} style={{width:'100%', heigth:'100%'}}/>
+  
   render() {
     const {navigate} = this.props.navigation;
     return (
