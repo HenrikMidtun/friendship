@@ -23,15 +23,19 @@ export default class TicketScreen extends React.Component {
   constructor(props)
   {
     super(props);
-    this.state = {timer:15, date:new Date()};
+    this.state = {timer: 5400, date:new Date()};
   }
-
-
 
   render() {
     const {navigate} = this.props.navigation;
+    this.returnTime(this.state.timer);
     return (
       <View style={styles.container}>
+        <View style={styles.buttonContainer}>
+          <View style={styles.leftButton}><Text style= {styles.textButton}>Active</Text></View>
+
+          <View style={styles.rightButton}><Text style={styles.textButton}>Expired</Text></View>
+        </View>
         <Text>{String(this.props.navigation.state.params.count)}</Text>
         <Text style={styles.text1}>
         Valid to {String(this.state.date.getDate())}/
@@ -43,7 +47,7 @@ export default class TicketScreen extends React.Component {
         </Text>
         <Text style={styles.text1}>Zone A</Text>
 
-        <Text style={styles.text2}>{String(this.state.timer)}</Text>
+        <Text style={styles.countdown}>{this.returnTime(this.state.timer)}</Text>
       </View>
     );
   }
@@ -51,11 +55,21 @@ export default class TicketScreen extends React.Component {
   componentDidMount()
   {
     this.interval = setInterval(
-      () => this.setState((prevState) => ({timer: prevState.timer -1 })),1000);
-
+      () => this.setState((prevState) => ({timer: prevState.timer -1})),1000);
 
     const validTo = this.state.date.getTime() + 5400000;
     this.setState({date: new Date(validTo)});
+  }
+
+  returnTime(seconds)
+  {
+    let hours = Math.floor(seconds/3600);
+    let remainingSeconds = seconds - hours*3600;
+    let minutes = Math.floor(remainingSeconds/60);
+    remainingSeconds = remainingSeconds - minutes*60;
+    let sec = remainingSeconds;
+
+    return (hours + ":" + minutes + ":" + ("0" + sec).slice(-2));
   }
 
   componentDidUpdate()
@@ -87,11 +101,47 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: 'RobotoCondensed',
   },
-  text2:
+  countdown:
   {
     color:"#a2ad00",
     fontSize: 24,
     fontFamily: 'RobotoCondensed',
-    textAlign:"right",
+    textAlign: "right",
+  },
+  textButton:
+  {
+    color:"white",
+    fontSize:18,
+    textAlign:"center",
+    fontFamily: 'RobotoCondensed',
+    paddingTop: 6,
+  },
+  leftButton:
+  {
+    borderWidth:2,
+    borderRadius:25,
+    width:135,
+    height:50,
+    backgroundColor:"#007c92",
+    borderColor: "#007c92",
+    marginRight: 12,
+  },
+
+  rightButton:
+  {
+    borderWidth:2,
+    borderRadius:25,
+    width:135,
+    height:50,
+    borderColor: "white",
+  },
+  buttonContainer:
+  {
+    flex:1,
+    flexDirection:"row",
+    marginTop:16,
+    justifyContent:"center",
+    maxHeight:75,
   }
+
 });
