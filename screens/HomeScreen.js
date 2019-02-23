@@ -10,7 +10,7 @@ import {
   Alert,
   Button,
 } from 'react-native';
-import { WebBrowser } from 'expo';
+import { WebBrowser, Font } from 'expo';
 
 import { MonoText } from '../components/StyledText';
 
@@ -33,6 +33,11 @@ export default class HomeScreen extends React.Component {
         <Button title='less' onPress={this._decrementCount}/>
       </ScrollView>
     );
+  }
+
+  componentWillMount()
+  {
+    Font.loadAsync({RobotoCondensed: require('../assets/fonts/Roboto-BoldCondensed.ttf')});
   }
 
   _goToScreen = () => {
