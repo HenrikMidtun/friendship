@@ -38,10 +38,11 @@ export default class HomeScreen extends React.Component {
   componentWillMount()
   {
     Font.loadAsync({RobotoCondensed: require('../assets/fonts/Roboto-BoldCondensed.ttf')});
+    Font.loadAsync({RobotoCondensedRegular: require('../assets/fonts/roboto-condensed.regular.ttf')});
   }
 
   _goToScreen = () => {
-    this.props.navigation.navigate('Ticket',{count:this.state.count})
+    this.props.navigation.navigate('Ticket',{count:this.state.count, price:38})
   };
 
   _incrementCount = () => {this.setState({count: this.state.count + 1})};
