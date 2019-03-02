@@ -1,6 +1,9 @@
 import React from 'react';
-import { ScrollView, View, StyleSheet, Text, ImageBackground,Button , Image, Dimensions } from 'react-native';
+import {Animated, ScrollView, View, StyleSheet, Text, ImageBackground,Button , Image, Dimensions } from 'react-native';
 import PropTypes from 'prop-types';
+import gradients from '../assets/styles/gradients-source.js';
+import Gradient from 'react-native-css-gradient';
+
 
 export default class TicketScreen extends React.Component {
 
@@ -23,68 +26,79 @@ export default class TicketScreen extends React.Component {
   constructor(props)
   {
     super(props);
-    this.state = {timer: 5400, date:new Date(), dateCurrent:new Date()};
+    this.state = {timer: 5400, date:new Date(), dateCurrent:new Date(), polkaAnimation: new Animated.Value(0)};
   }
 
   render() {
     const {navigate} = this.props.navigation;
+    const gradient = "repeating-linear-gradient(-45deg, #a2ad00, #a2ad00 28px, black 26px, black 42px)";
     this.returnTime(this.state.timer);
     return (
-      <ScrollView contentContainerStyle={styles.container}>
+
+         
+
+      <View style={styles.container}>
         <View style={styles.buttonContainer}>
           <View style={styles.leftButton}><Text style= {styles.textButton}>ACTIVE</Text></View>
 
           <View style={styles.rightButton}><Text style={styles.textButton}>EXPIRED</Text></View>
         </View>
 
-      <View style={styles.whitebox}>  
-        <Text style={styles.text1}>
-        Valid to {String(this.state.date.getDate())}/
-        {String(this.state.date.getMonth()+1)}/
-        {String(this.state.date.getFullYear()).slice(-2)}
-        {" "}   
-        {("0" + this.state.date.getHours()).slice(-2)}:
-        {("0" + this.state.date.getMinutes()).slice(-2)}
-        </Text>
-        <Text style={styles.text1}>Zone A</Text>
+        <ScrollView contentContainerStyle={styles.practicalContainer} overScrollMode="never">  
 
-        <Text style={styles.countdown}>{this.returnTime(this.state.timer)}</Text>
 
-        <View style={styles.textContainer}>
-          <View style={styles.textInnerContainer}>
-            <Text style={styles.textLeft}>{String(this.props.navigation.state.params.count)} Adult </Text>
-            <Text style={styles.textRight}>kr{String(this.props.navigation.state.params.price)}.00</Text>
+         <View style={styles.upperContainer}>
+            <Image style={styles.upperImage} source={require('../assets/images/upperImage.png')}/>
           </View>
-            <View style={styles.line}></View>
-          <View style={styles.textInnerContainer}>
-            <Text style={styles.textLeft}>Sum</Text>
-            <Text style={styles.textRight}>kr{String(this.props.navigation.state.params.price*this.props.navigation.state.params.count)}.00</Text>
-          </View>
-            <View style={styles.line}></View>
-            <View style={styles.line}></View>
-        </View>
-        <View>
-          <View>
-            <Text style={styles.text2}>12% vat. kr4.07</Text>
-            <Text style={styles.text2}>Vat.base kr33.93</Text>
-            <Text style={styles.text2}>Paid by: phone bill</Text>
-            <Text style={styles.text2}>Purchased:</Text>
-            <Text style={styles.text2}>
-            Valid to {String(this.state.dateCurrent.getDate())}/
-            {String(this.state.dateCurrent.getMonth()+1)}/
-            {String(this.state.dateCurrent.getFullYear()).slice(-2)}
-            {", "}   
-            {("0" + this.state.dateCurrent.getHours()).slice(-2)}:
-            {("0" + this.state.dateCurrent.getMinutes()).slice(-2)}
+
+
+          <View style={styles.whitebox}>
+
+            <Text style={styles.text1}>
+            Valid to {String(this.state.date.getDate())}/
+            {String(this.state.date.getMonth()+1)}/
+            {String(this.state.date.getFullYear()).slice(-2)}
+            {" "}   
+            {("0" + this.state.date.getHours()).slice(-2)}:
+            {("0" + this.state.date.getMinutes()).slice(-2)}
             </Text>
-            <Text>Insert Image here</Text>
+
+            <Text style={styles.text1}>Zone A</Text>
+
+            <View style={styles.countdownContainer}>
+              <Gradient gradient={gradient} style={styles.polkaBar}></Gradient>
+              <Text style={styles.countdown}>{this.returnTime(this.state.timer)}</Text>
+            </View>
+
+            <View style={styles.textContainer}>
+              <View style={styles.textInnerContainer}>
+                <Text style={styles.textLeft}>{String(this.props.navigation.state.params.count)} Adult </Text>
+                <Text style={styles.textRight}>kr{String(this.props.navigation.state.params.price)}.00</Text>
+
+              </View>
+
+              <View style={styles.line}></View>
+              <View style={styles.textInnerContainer}>
+                <Text style={styles.textLeft}>Sum</Text>
+                <Text style={styles.textRight}>kr{String(this.props.navigation.state.params.price*this.props.navigation.state.params.count)}.00</Text>
+
+              </View>
+
+              <View style={styles.line}></View>
+              <View style={styles.line}></View>
+
+            </View>
           </View>
-        </View>
+          <View style={styles.lowerContainer}>
+            <Image style={styles.lowerImage} source={require('../assets/images/lowerImage.png')}/>
+          </View>
+
+        </ScrollView>
       </View>
-      </ScrollView>
+
+
     );
   }
-
   componentDidMount()
   {
     this.interval = setInterval(
@@ -92,6 +106,14 @@ export default class TicketScreen extends React.Component {
 
     const validTo = this.state.dateCurrent.getTime() + 5400000;
     this.setState({date: new Date(validTo)});
+
+    Animated.timing()
+    {
+      this.state.polkaAnimation
+      {
+        //something
+      }
+    }
   }
 
   returnTime(seconds)
@@ -102,7 +124,7 @@ export default class TicketScreen extends React.Component {
     remainingSeconds = remainingSeconds - minutes*60;
     let sec = remainingSeconds;
 
-    return (hours + ":" + minutes + ":" + ("0" + sec).slice(-2));
+    return ("0" + hours + ":" + minutes + ":" + ("0" + sec).slice(-2));
   }
 
   componentDidUpdate()
@@ -120,11 +142,27 @@ export default class TicketScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor:"#272727",
     width: '100%',
-    justifyContent:"center",
+    justifyContent:"space-between",
     alignItems:"center",
+  },
+  practicalContainer:
+  {
+    marginTop:20,
+    width:"85%",
+    alignItems: "center",
+    height:"150%",
+    justifyContent:"flex-start",
+  },
+  whitebox:
+  {
+    backgroundColor:"white",
+    width:"100%",
+    height:"40%",
+    position:"relative",
+    alignItems:"center",
+    justifyContent:"space-between",
   },
   button1: {
     flex: 1,
@@ -135,21 +173,55 @@ const styles = StyleSheet.create({
     fontSize: 24,
     textAlign: "center",
     fontFamily: 'RobotoCondensed',
+    paddingBottom: 18,
   },
   text2:
   {
     color:"grey",
-    fontSize:16,
+    fontSize:8,
     textAlign: "left",
     fontFamily: 'RobotoCondensedRegular',
   },
+  countdownContainer:
+  {
+    flexDirection:"row",
+    width:"100%",
+    marginRight:"5%",
+    paddingBottom:"5%",
+    alignItems:"center",
+  },
   countdown:
   {
+    flex:2,
     color:"#a2ad00",
-    fontSize: 24,
+    fontSize: 32,
     fontFamily: 'RobotoCondensed',
     textAlign: "right",
   },
+  polkaBar:
+  {
+    width:140,
+    height:30,
+    alignItems:"flex-start",
+    justifyContent:"flex-end",
+  },
+/*
+  .bar {
+  width: 100%;
+  height: 20px;
+  border-radius: 3px;
+  background-image: 
+    repeating-linear-gradient(
+      -45deg,
+      #A3AA44,
+      #A3AA44 16px,
+      #000000 14px,
+      black 26px // determines size 
+    );
+  background-size: 37px 37px;
+  animation: move .5s linear infinite;
+  animation-direction: reverse;
+*/
   textButton:
   {
     color:"white",
@@ -168,7 +240,6 @@ const styles = StyleSheet.create({
     borderColor: "#007c92",
     marginRight: 12,
   },
-
   rightButton:
   {
     borderWidth:2,
@@ -179,29 +250,35 @@ const styles = StyleSheet.create({
   },
   buttonContainer:
   {
-    flex:1,
     flexDirection:"row",
     marginTop:16,
     justifyContent:"center",
     maxHeight:75,
+    backgroundColor:"transparent",
+    //Hvis scrolle under
+    //flex:1, zIndex:3
+
   },
   textContainer:
   {
+    width: "95%",
     flex:1,
     alignItems:"center",
-    justifyContent:"center",
-   
-
+    justifyContent:"flex-start",
   },
   textInnerContainer:
   {
-    flex:1,
-    width:240,
+    width: "100%",
     flexDirection:"row",
-    borderColor:"white",
-    maxHeight:65,
     alignItems:"center",
-    justifyContent:"center",
+    justifyContent:"space-between",
+  },
+  line:
+  {
+    borderColor:"black",
+    width: 290,
+    borderTopWidth: 1,
+    paddingBottom: 1,
   },
   textLeft:
   {
@@ -219,56 +296,33 @@ const styles = StyleSheet.create({
     fontFamily: 'RobotoCondensed',
     textAlign:'right',
   },
-  line:
+  lowerContainer:
   {
-    borderColor:"black",
-    width:240,
-    borderWidth:0.8,
-    maxHeight:1,
-    marginBottom: 1,
+    width:"96%",
+    height:"38%",
+    position:"relative",
+    alignSelf:"flex-start",
   },
-  whitebox:
+  upperContainer:
   {
-    flex:1,
-    backgroundColor:"white",
-    width:300,
-    justifyContent:"center",
+    width:"105%",
+    height:"7%",
+    position:"relative",
+    alignSelf:"flex-start",
   },
-  /*
-  body,
-header h1 {
-  margin: 0;
-  padding: 0;
-}
-*/
-/*height of wave = h = 50px*/
-  header: {
-  background: "black",
-  height: 20,
-  color: "transparent",
-  padding: 0,
-  paddingBottom: 0, /*h*/
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  textAlign: "center",
-  position: "relative",
-  overflow: "hidden",
-},
-
-//header:before,
-headerAfter: {
-  content: "",
-  position: "absolute",
-  left: 0,
-  right: 0,
-  bottom: -5, /*h/2*/
-  height: 50, /*h*/
-  //background: radial-gradient(closest-side, #fff, #fff 50%, transparent 50%),
-  /*or farthest-side*/
-  backgroundSize: 16 16, /*h h*/
-  backgroundPosition: 0 37, /*0 h/2*/
-  //backgroundRepeat: repeat-x,
-}
+  lowerImage:
+  {
+    width:"110%",
+    position:"absolute",
+    top:0,
+    height:"100%",
+  },
+  upperImage:
+  {
+    position:"absolute",
+     bottom:0,
+     width:"100%",
+      height:"100%",
+  },
 
 });
