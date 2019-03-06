@@ -1,8 +1,8 @@
 import React from 'react';
-import {Animated, ScrollView, View, StyleSheet, Text, ImageBackground,Button , Image, Dimensions } from 'react-native';
+import {Animated, ScrollView, View, StyleSheet, Text, ImageBackground,Button , Image, Dimensions, Easing } from 'react-native';
 import PropTypes from 'prop-types';
 import gradients from '../assets/styles/gradients-source.js';
-import Gradient from 'react-native-css-gradient';
+import Gradient from 'react-native-css-gradient'; 
 
 
 export default class TicketScreen extends React.Component {
@@ -26,25 +26,36 @@ export default class TicketScreen extends React.Component {
   constructor(props)
   {
     super(props);
-    this.state = {timer: 5400, date:new Date(), dateCurrent:new Date(), polkaAnimation: new Animated.Value(0)};
+    this.state = {timer: 5400, date:new Date(), dateCurrent:new Date(), polkaAnimation: new Animated.Value(0),};
   }
 
+
   render() {
+
     const {navigate} = this.props.navigation;
     const gradient = "repeating-linear-gradient(-45deg, #a2ad00, #a2ad00 28px, black 26px, black 42px)";
     this.returnTime(this.state.timer);
     return (
 
-         
-
       <View style={styles.container}>
-        <View style={styles.buttonContainer}>
+        <View style={[styles.buttonContainer, {zIndex:1},this.state.yOffset < 20 ? styles.transparentContainer : styles.overlayContainer]}>
           <View style={styles.leftButton}><Text style= {styles.textButton}>ACTIVE</Text></View>
 
           <View style={styles.rightButton}><Text style={styles.textButton}>EXPIRED</Text></View>
         </View>
 
-        <ScrollView contentContainerStyle={styles.practicalContainer} overScrollMode="never">  
+        <ScrollView 
+          contentContainerStyle={styles.practicalContainer} 
+          overScrollMode="never" 
+          onScroll={event => { 
+            this.state.yOffset = event.nativeEvent.contentOffset.y;
+          }}
+          onScrollEndDrag={event => { 
+            this.state.yOffset = event.nativeEvent.contentOffset.y;
+          }}
+          scrollEventThrottle={160}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}>  
 
 
          <View style={styles.upperContainer}>
@@ -66,7 +77,14 @@ export default class TicketScreen extends React.Component {
             <Text style={styles.text1}>Zone A</Text>
 
             <View style={styles.countdownContainer}>
-              <Gradient gradient={gradient} style={styles.polkaBar}></Gradient>
+
+              <View style={styles.polkaBar}>
+              <Animated.Image 
+              style={[styles.polkaImage,{transform: [{translateX:this.state.polkaAnimation},]},]}
+              source={require('../assets/images/ticketImage.png')}/>
+              </View>
+
+
               <Text style={styles.countdown}>{this.returnTime(this.state.timer)}</Text>
             </View>
 
@@ -90,6 +108,7 @@ export default class TicketScreen extends React.Component {
             </View>
           </View>
           <View style={styles.lowerContainer}>
+
             <Image style={styles.lowerImage} source={require('../assets/images/lowerImage.png')}/>
           </View>
 
@@ -106,14 +125,21 @@ export default class TicketScreen extends React.Component {
 
     const validTo = this.state.dateCurrent.getTime() + 5400000;
     this.setState({date: new Date(validTo)});
+    this.animate();
+  }
 
-    Animated.timing()
-    {
-      this.state.polkaAnimation
+  animate()
+  {
+    this.state.polkaAnimation.setValue(0);
+    Animated.timing(
+      this.state.polkaAnimation,
       {
-        //something
+        toValue:-236,
+        duration:3500,
+        easing:Easing.linear,
+        useNativeDriver: true,
       }
-    }
+    ).start(()=>{this.animate()});
   }
 
   returnTime(seconds)
@@ -138,18 +164,21 @@ export default class TicketScreen extends React.Component {
   {
     clearInterval(this.interval);
   }
+
+
 }
+
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor:"#272727",
     width: '100%',
-    justifyContent:"space-between",
+    justifyContent:"flex-start",
     alignItems:"center",
   },
   practicalContainer:
   {
-    marginTop:20,
+    paddingTop:80,
     width:"85%",
     alignItems: "center",
     height:"150%",
@@ -195,33 +224,24 @@ const styles = StyleSheet.create({
     flex:2,
     color:"#a2ad00",
     fontSize: 32,
-    fontFamily: 'RobotoCondensed',
+    fontFamily:'RobotoCondensed',
     textAlign: "right",
   },
   polkaBar:
   {
-    width:140,
+    width:"45%",
     height:30,
     alignItems:"flex-start",
     justifyContent:"flex-end",
+    overflow:"hidden",
   },
-/*
-  .bar {
-  width: 100%;
-  height: 20px;
-  border-radius: 3px;
-  background-image: 
-    repeating-linear-gradient(
-      -45deg,
-      #A3AA44,
-      #A3AA44 16px,
-      #000000 14px,
-      black 26px // determines size 
-    );
-  background-size: 37px 37px;
-  animation: move .5s linear infinite;
-  animation-direction: reverse;
-*/
+  polkaImage:
+  {
+    width:423,
+    height:30,
+    resizeMode:"repeat",
+    
+  },
   textButton:
   {
     color:"white",
@@ -247,17 +267,26 @@ const styles = StyleSheet.create({
     width:135,
     height:50,
     borderColor: "white",
+    backgroundColor:"#272727",
+    opacity:1,
   },
   buttonContainer:
   {
+    position:"absolute",
     flexDirection:"row",
-    marginTop:16,
+    paddingTop:16,
     justifyContent:"center",
-    maxHeight:75,
+    alignItems:"flex-start",
+    width:"100%",
+    height:80,
+  },
+  transparentContainer:
+  {
     backgroundColor:"transparent",
-    //Hvis scrolle under
-    //flex:1, zIndex:3
-
+  },
+  overlayContainer:
+  {
+    backgroundColor:"#00000070",
   },
   textContainer:
   {
@@ -302,6 +331,7 @@ const styles = StyleSheet.create({
     height:"38%",
     position:"relative",
     alignSelf:"flex-start",
+
   },
   upperContainer:
   {
@@ -315,14 +345,14 @@ const styles = StyleSheet.create({
     width:"110%",
     position:"absolute",
     top:0,
-    height:"100%",
+    height:"112%",
   },
   upperImage:
   {
     position:"absolute",
-     bottom:0,
-     width:"100%",
-      height:"100%",
+    bottom:0,
+    width:"100%",
+    height:"100%",
   },
 
 });
