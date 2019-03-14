@@ -1,8 +1,9 @@
 {
   "expo": {
-    "name": "menu",
+    "name": "Bengal",
     "slug": "menuApp",
     "privacy": "public",
+    "icon":"./assets/images/iconImage.png",
     "sdkVersion": "32.0.0",
     "platforms": [
       "ios",
@@ -11,13 +12,19 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "checkAutomatically": "ON_ERROR_RECOVERY",
+      "enabled":false,
     },
+
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "android":{
+      "package": "com.fake.bengal"
+    },
   }
 }

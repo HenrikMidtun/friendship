@@ -2,8 +2,10 @@ import React from 'react';
 import {Animated, ScrollView, View, StyleSheet, Text, ImageBackground,Button , Image, Dimensions, Easing } from 'react-native';
 import PropTypes from 'prop-types';
 import gradients from '../assets/styles/gradients-source.js';
-import Gradient from 'react-native-css-gradient'; 
+import Gradient from 'react-native-css-gradient';
 
+//Text.defaultProps = Text.defaultProps || {};
+//Text.defaultProps.allowFontScaling = false;
 
 export default class TicketScreen extends React.Component {
 
@@ -28,8 +30,6 @@ export default class TicketScreen extends React.Component {
     super(props);
     this.state = {timer: 5400, date:new Date(), dateCurrent:new Date(), polkaAnimation: new Animated.Value(0),};
   }
-
-
   render() {
 
     const {navigate} = this.props.navigation;
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     paddingTop:80,
     width:"85%",
     alignItems: "center",
-    height:"150%",
+    height:"160%",
     justifyContent:"flex-start",
   },
   whitebox:
@@ -199,10 +199,10 @@ const styles = StyleSheet.create({
   text1:
   {
     color:"black",
-    fontSize: 24,
+    fontSize: 28,
     textAlign: "center",
     fontFamily: 'RobotoCondensed',
-    paddingBottom: 18,
+    paddingBottom: 16,
   },
   text2:
   {
@@ -216,14 +216,15 @@ const styles = StyleSheet.create({
     flexDirection:"row",
     width:"100%",
     marginRight:"5%",
-    paddingBottom:"5%",
+    paddingBottom:"7%",
+    paddingTop:10,
     alignItems:"center",
   },
   countdown:
   {
     flex:2,
     color:"#a2ad00",
-    fontSize: 32,
+    fontSize: 42,
     fontFamily:'RobotoCondensed',
     textAlign: "right",
   },
@@ -245,10 +246,9 @@ const styles = StyleSheet.create({
   textButton:
   {
     color:"white",
-    fontSize:16,
+    fontSize:20,
     textAlign:"center",
     fontFamily: 'RobotoCondensed',
-    paddingTop: 8,
   },
   leftButton:
   {
@@ -259,6 +259,7 @@ const styles = StyleSheet.create({
     backgroundColor:"#007c92",
     borderColor: "#007c92",
     marginRight: 12,
+    justifyContent:"center",
   },
   rightButton:
   {
@@ -269,6 +270,7 @@ const styles = StyleSheet.create({
     borderColor: "white",
     backgroundColor:"#272727",
     opacity:1,
+    justifyContent:"center",
   },
   buttonContainer:
   {
@@ -313,7 +315,7 @@ const styles = StyleSheet.create({
   {
     flex:2,
     color:"black",
-    fontSize: 24,
+    fontSize: 28,
     fontFamily: 'RobotoCondensed',
     textAlign:"left",
 
@@ -321,7 +323,7 @@ const styles = StyleSheet.create({
   textRight:
   {
     color:"black",
-    fontSize: 24,
+    fontSize: 28,
     fontFamily: 'RobotoCondensed',
     textAlign:'right',
   },
@@ -345,7 +347,7 @@ const styles = StyleSheet.create({
     width:"110%",
     position:"absolute",
     top:0,
-    height:"112%",
+    height:"95%",
   },
   upperImage:
   {

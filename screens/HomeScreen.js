@@ -19,7 +19,7 @@ export default class HomeScreen extends React.Component {
   constructor(props)
   {
     super(props);
-    this.state={count:0,};
+    this.state={count:1,};
     //this.goToScreen = this.goToScreen.bind(this);
   }
 
